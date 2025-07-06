@@ -5,6 +5,8 @@ import 'package:pokidex/component/my_appbar.dart';
 import 'package:pokidex/component/my_cards.dart';
 import 'package:pokidex/pages/pokemonDetail_page.dart';
 
+import '../models/pokemon_model.dart';
+
 class PokemonListPage extends StatefulWidget {
   const PokemonListPage({super.key});
 
@@ -14,6 +16,7 @@ class PokemonListPage extends StatefulWidget {
 
 class PokemonListPageState extends State<PokemonListPage> {
   List<Map<String, dynamic>> pokemon = [];
+  final _Pokemon = Pokemon(name: '', image: '');
   bool isLoading = true;
   String? errorMessage;
 
@@ -30,6 +33,7 @@ class PokemonListPageState extends State<PokemonListPage> {
         errorMessage = null;
       });
 
+      //API service
       final response = await http.get(
         Uri.parse('https://pokeapi.co/api/v2/pokemon/?limit=20'),
       );
@@ -43,10 +47,10 @@ class PokemonListPageState extends State<PokemonListPage> {
         for (int i = 0; i < results.length; i++) {
           final name = results[i]['name'];
           final id = i + 1;
-          final imageUrl =
+          final image =
               'https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/$id.png';
 
-          loadedPokemon.add({'name': name, 'image': imageUrl, 'id': id});
+          loadedPokemon.add({'name': name, 'image': image, 'id': id});
         }
 
         setState(() {
@@ -107,75 +111,34 @@ class PokemonListPageState extends State<PokemonListPage> {
     }
 
     return GridView.builder(
-        padding: const EdgeInsets.all(16),
-        gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
-          crossAxisCount: 2,
-          childAspectRatio: 0.8,
-          crossAxisSpacing: 16,
-          mainAxisSpacing: 16,
-        ),
-        itemCount: pokemon.length,
-        itemBuilder: (context, index) {
-          final poke = pokemon[index];
-          return GestureDetector(
-            onTap: () {
-              Navigator.push(
-                context,
-                MaterialPageRoute(builder: (context) => PokemonDetailPage()),
-              );
-            },
-            child: MyCards(
-              child: Column(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: [
-                  Image.network(
-                    poke['image'],
-                    height: 100,
-                    width: 100,
-                    fit: BoxFit.contain,
-                    loadingBuilder: (context, child, loadingProgress) {
-                      if (loadingProgress == null) return child;
-                      return const SizedBox(
-                        height: 100,
-                        width: 100,
-                        child: Center(child: CircularProgressIndicator()),
-                      );
-                    },
-                    errorBuilder: (context, error, stackTrace) {
-                      return Container(
-                        height: 100,
-                        width: 100,
-                        decoration: BoxDecoration(
-                          color: Colors.grey[300],
-                          borderRadius: BorderRadius.circular(8),
-                        ),
-                        child: const Icon(
-                          Icons.image_not_supported,
-                          size: 50,
-                          color: Colors.grey,
-                        ),
-                      );
-                    },
-                  ),
-                  const SizedBox(height: 8),
-                  Text(
-                    poke['name'].toString().toUpperCase(),
-                    style: const TextStyle(
-                      fontWeight: FontWeight.bold,
-                      fontSize: 16,
-                    ),
-                    textAlign: TextAlign.center,
-                  ),
-                  Text(
-                    '#${poke['id']}',
-                    style: TextStyle(color: Colors.grey[600], fontSize: 14),
-                  ),
-                ],
-              ),
-            ),
-          );
-        },
-      );
+      padding: const EdgeInsets.all(16),
+      gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
+        crossAxisCount: 2,
+        childAspectRatio: 0.8,
+        crossAxisSpacing: 16,
+        mainAxisSpacing: 16,
+      ),
+      itemCount: pokemon.length,
+      itemBuilder: (context, index) {
+        final poke = pokemon[index];
 
+        //Using Custom Cards to display Pokemon
+        return MyCards(
+          image: poke['image'],
+          name: poke['name'],
+          id: poke['id'],
+          onTap: () {
+            Navigator.push(
+              context,
+              MaterialPageRoute(
+                builder: (_) => PokemonDetailPage(
+                  pokemon: Pokemon(name: poke['name'], image: poke['image']),
+                ),
+              ),
+            );
+          },
+        );
+      },
+    );
   }
 }
