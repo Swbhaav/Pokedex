@@ -16,7 +16,7 @@ class PokemonListPage extends StatefulWidget {
 
 class PokemonListPageState extends State<PokemonListPage> {
   List<Map<String, dynamic>> pokemon = [];
-  final _Pokemon = Pokemon(name: '', image: '');
+  final _pokemon = Pokemon(name: '', image: '');
   bool isLoading = true;
   String? errorMessage;
 

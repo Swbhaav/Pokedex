@@ -1,13 +1,11 @@
-import 'dart:ui';
-
 import 'package:flutter/material.dart';
 import 'package:pokidex/component/my_appbar.dart';
-import 'package:pokidex/component/my_clipper.dart';
 import 'package:pokidex/models/pokemon_model.dart';
 
 class PokemonDetailPage extends StatelessWidget {
   final Pokemon pokemon;
-  const PokemonDetailPage({super.key, required this.pokemon});
+
+  PokemonDetailPage({super.key, required this.pokemon});
 
   @override
   Widget build(BuildContext context) {
@@ -15,13 +13,17 @@ class PokemonDetailPage extends StatelessWidget {
       appBar: MyAppbar(title: pokemon.name.toUpperCase()),
       body: Stack(
         children: [
-          SizedBox(
+          SizedBox(width: double.infinity,),
+          Image.network(
+            pokemon.image,
             width: double.infinity,
+            fit: BoxFit.contain,
+            filterQuality: FilterQuality.high,
           ),
           scroll(),
         ],
       ),
-      );
+    );
   }
 
   Widget scroll() {
@@ -29,14 +31,15 @@ class PokemonDetailPage extends StatelessWidget {
       initialChildSize: 0.6,
       maxChildSize: 1.0,
       minChildSize: 0.6,
+
       builder: (context, scrollController) {
         return Container(
           clipBehavior: Clip.hardEdge,
           decoration: BoxDecoration(
             color: Colors.yellow,
             borderRadius: BorderRadius.only(
-              topLeft: Radius.circular(20),
-              topRight: Radius.circular(20),
+              topLeft: Radius.circular(40),
+              topRight: Radius.circular(40),
             ),
           ),
           child: SingleChildScrollView(
@@ -48,14 +51,10 @@ class PokemonDetailPage extends StatelessWidget {
                   child: Row(
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: [
-                      Container(
-                        height: 5,
-                        width: 35,
-                        color: Colors.black,
-                      )
+                      Container(height: 5, width: 35, color: Colors.black),
                     ],
                   ),
-                )
+                ),
               ],
             ),
           ),
