@@ -8,7 +8,7 @@ class HomePage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return // // Option 2: Home page with navigation button
+    return 
        Scaffold(
       appBar: MyAppbar(title: "Pokemon"),
       body: Center(

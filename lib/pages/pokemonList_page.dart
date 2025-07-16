@@ -16,7 +16,7 @@ class PokemonListPage extends StatefulWidget {
 
 class PokemonListPageState extends State<PokemonListPage> {
   List<Map<String, dynamic>> pokemon = [];
-  final _pokemon = Pokemon(name: '', image: '');
+  final _pokemon = Pokemon(name: '', image: '', height:0.0 , weight:0.0,);
   bool isLoading = true;
   String? errorMessage;
 
@@ -49,8 +49,10 @@ class PokemonListPageState extends State<PokemonListPage> {
           final id = i + 1;
           final image =
               'https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/$id.png';
+          final height= results[i]['height'];
+          final weight= results[i]['weight'];
 
-          loadedPokemon.add({'name': name, 'image': image, 'id': id});
+          loadedPokemon.add({'name': name, 'image': image, 'id': id, 'height': height,});
         }
 
         setState(() {

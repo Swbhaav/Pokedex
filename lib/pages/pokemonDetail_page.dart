@@ -2,20 +2,28 @@ import 'package:flutter/material.dart';
 import 'package:pokidex/component/my_appbar.dart';
 import 'package:pokidex/models/pokemon_model.dart';
 
-class PokemonDetailPage extends StatelessWidget {
+class PokemonDetailPage extends StatefulWidget {
   final Pokemon pokemon;
 
   PokemonDetailPage({super.key, required this.pokemon});
 
   @override
+  State<PokemonDetailPage> createState() => _PokemonDetailPageState();
+}
+
+class _PokemonDetailPageState extends State<PokemonDetailPage> {
+  @override
   Widget build(BuildContext context) {
+    var height = MediaQuery.of(context).size.height;
+    var width = MediaQuery.of(context).size.width;
+
     return Scaffold(
-      appBar: MyAppbar(title: pokemon.name.toUpperCase()),
+      appBar: MyAppbar(title: widget.pokemon.name.toUpperCase()),
       body: Stack(
         children: [
-          SizedBox(width: double.infinity,),
+          SizedBox(width: width, height: height),
           Image.network(
-            pokemon.image,
+            widget.pokemon.image,
             width: double.infinity,
             fit: BoxFit.contain,
             filterQuality: FilterQuality.high,
@@ -51,7 +59,26 @@ class PokemonDetailPage extends StatelessWidget {
                   child: Row(
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: [
-                      Container(height: 5, width: 35, color: Colors.black),
+                      Positioned(
+                        bottom: 0,
+                        child: Container(
+
+                          child: Column(
+                            mainAxisAlignment: MainAxisAlignment.start,
+                            children: [
+                              Row(
+                                mainAxisAlignment: MainAxisAlignment.start,
+                                children: [
+                                  Text(
+                                    widget.pokemon.name,
+                                    style: TextStyle(color: Colors.white),
+                                  ),
+                                ],
+                              ),
+                            ],
+                          ),
+                        ),
+                      ),
                     ],
                   ),
                 ),
