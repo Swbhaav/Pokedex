@@ -1,11 +1,12 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_svg/flutter_svg.dart';
 
 import '../models/pokemon_model.dart';
 
 
 
 class MyCards extends StatelessWidget {
-  final _Pokemon = Pokemon(name: '', image: '');
+  final _Pokemon = Pokemon(name: '', image: '',height: 0, weight: 0);
   final String image;
   final String name;
   final int id;
@@ -26,19 +27,15 @@ class MyCards extends StatelessWidget {
         child: Column(
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
-               Image.network(
+               SvgPicture.network(
                   image,
                   height: 100,
                   width: 100,
                  fit: BoxFit.contain,
-                 loadingBuilder: (context, child, loadingProgress) {
-                   if (loadingProgress == null) return child;
-                   return const SizedBox(
-                     height: 100,
-                     width: 100,
-                     child: Center(child: CircularProgressIndicator()),
-                   );
-                 },
+                 placeholderBuilder: (BuildContext context) => Container(
+                   padding: EdgeInsets.all(30),
+                   child: const CircularProgressIndicator(),
+                 ),
                  errorBuilder: (context, error, stackTrace) {
                    return Container(
                      height: 100,

@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_svg/flutter_svg.dart';
 import 'package:pokidex/component/my_appbar.dart';
 import 'package:pokidex/models/pokemon_model.dart';
 
@@ -21,72 +22,59 @@ class _PokemonDetailPageState extends State<PokemonDetailPage> {
       appBar: MyAppbar(title: widget.pokemon.name.toUpperCase()),
       body: Stack(
         children: [
-          SizedBox(width: width, height: height),
-          Image.network(
-            widget.pokemon.image,
-            width: double.infinity,
-            fit: BoxFit.contain,
-            filterQuality: FilterQuality.high,
+          Positioned(
+            top: 0,
+            right: 0,
+            left: 0,
+            height: height * 0.5,
+            child: Center(
+              child: SvgPicture.network(
+                widget.pokemon.image,
+                width: width,
+                fit: BoxFit.scaleDown,
+              ),
+            ),
           ),
-          scroll(),
+
+          Positioned(
+            bottom: 0,
+            right: 0,
+            left: 0,
+            height: height * 0.5,
+            child: Center(child: scroll()),
+          ),
         ],
       ),
     );
   }
 
   Widget scroll() {
-    return DraggableScrollableSheet(
-      initialChildSize: 0.6,
-      maxChildSize: 1.0,
-      minChildSize: 0.6,
-
-      builder: (context, scrollController) {
-        return Container(
-          clipBehavior: Clip.hardEdge,
+    return Column(
+      mainAxisAlignment: MainAxisAlignment.start,
+      children: [
+        Container(
+          width: double.infinity,
           decoration: BoxDecoration(
             color: Colors.yellow,
             borderRadius: BorderRadius.only(
-              topLeft: Radius.circular(40),
-              topRight: Radius.circular(40),
+              topRight: Radius.circular(30),
+              topLeft: Radius.circular(30),
             ),
           ),
-          child: SingleChildScrollView(
-            controller: scrollController,
-            child: Column(
-              children: [
-                Padding(
-                  padding: const EdgeInsets.only(top: 10, bottom: 25),
-                  child: Row(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: [
-                      Positioned(
-                        bottom: 0,
-                        child: Container(
+           child: Padding(
+            padding: EdgeInsets.all(25),
+            child: Text("Name: " + widget.pokemon.name.toUpperCase()),
 
-                          child: Column(
-                            mainAxisAlignment: MainAxisAlignment.start,
-                            children: [
-                              Row(
-                                mainAxisAlignment: MainAxisAlignment.start,
-                                children: [
-                                  Text(
-                                    widget.pokemon.name,
-                                    style: TextStyle(color: Colors.white),
-                                  ),
-                                ],
-                              ),
-                            ],
-                          ),
-                        ),
-                      ),
-                    ],
-                  ),
-                ),
-              ],
-            ),
           ),
-        );
-      },
+
+
+        ),
+        SizedBox(height: 15), // Spacing
+
+
+
+
+      ],
     );
   }
 }

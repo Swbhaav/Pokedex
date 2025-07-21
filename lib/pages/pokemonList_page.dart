@@ -16,7 +16,7 @@ class PokemonListPage extends StatefulWidget {
 
 class PokemonListPageState extends State<PokemonListPage> {
   List<Map<String, dynamic>> pokemon = [];
-  final _pokemon = Pokemon(name: '', image: '', height:0.0 , weight:0.0,);
+  final _pokemon = Pokemon(name: '', image: '', height:0, weight: 0);
   bool isLoading = true;
   String? errorMessage;
 
@@ -42,17 +42,46 @@ class PokemonListPageState extends State<PokemonListPage> {
         final data = jsonDecode(response.body);
         final List results = data['results'];
 
+
+
         List<Map<String, dynamic>> loadedPokemon = [];
 
         for (int i = 0; i < results.length; i++) {
           final name = results[i]['name'];
-          final id = i + 1;
-          final image =
-              'https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/$id.png';
-          final height= results[i]['height'];
-          final weight= results[i]['weight'];
+          final detailUrl = results[i]['url']; // This extracts all details form the url
 
-          loadedPokemon.add({'name': name, 'image': image, 'id': id, 'height': height,});
+
+          final detailResponse = await http.get(Uri.parse(detailUrl));
+          if (detailResponse.statusCode == 200) {
+            final pokemonDetails = jsonDecode(detailResponse.body);
+
+
+
+            final id = pokemonDetails['id'];
+            final image =
+                'https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/dream-world/${id}.svg';
+            final height = pokemonDetails['height'];
+            final weight = pokemonDetails['weight'];
+            final types = pokemonDetails['types']; // Array of type objects
+            final abilities = pokemonDetails['abilities']; // Array of abilities
+            final stats = pokemonDetails['stats']; // HP, Attack, Defense, etc.
+            final sprites = pokemonDetails['sprites']; // Various image URLs
+
+            loadedPokemon.add({
+              'name': name,
+              'image': image,
+              'id': id,
+              'height': height,
+              'weight':weight,
+              'types': types,
+              'abilities':abilities,
+              'stats':stats,
+
+            });
+          }
+
+
+
         }
 
         setState(() {
@@ -134,7 +163,7 @@ class PokemonListPageState extends State<PokemonListPage> {
               context,
               MaterialPageRoute(
                 builder: (_) => PokemonDetailPage(
-                  pokemon: Pokemon(name: poke['name'], image: poke['image']),
+                  pokemon: Pokemon(name: poke['name'], image: poke['image'], height: poke['height'], weight: poke['weight']),
                 ),
               ),
             );

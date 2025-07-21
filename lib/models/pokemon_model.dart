@@ -3,22 +3,22 @@ class Pokemon
 {
     String name;
     String image;
-    double? height;
-    double? weight;
+    int height;
+    int weight;
 
   Pokemon({
     required this.name,
     required this.image,
-    this.height,
-    this.weight,
+    required this.height,
+    required this.weight,
 
 });
   factory Pokemon.fromJson(Map<String,dynamic>json){
     return Pokemon(
         name: json['name'],
         image: json['image'],
-        height: json['height'],
-        weight: json['weight'],
+        height: json['height'] as int,
+        weight: json['weight'] as int,
     );
   }
 
