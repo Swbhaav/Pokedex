@@ -19,7 +19,15 @@ class _PokemonDetailPageState extends State<PokemonDetailPage> {
     var width = MediaQuery.of(context).size.width;
 
     return Scaffold(
-      appBar: MyAppbar(title: widget.pokemon.name.toUpperCase()),
+      appBar: MyAppbar(
+        title: widget.pokemon.name.toUpperCase(),
+        action: [
+          Padding(
+            padding: const EdgeInsets.all(8.0),
+            child: Icon(Icons.favorite),
+
+          )],
+      ),
       body: Stack(
         children: [
           Positioned(
@@ -31,6 +39,7 @@ class _PokemonDetailPageState extends State<PokemonDetailPage> {
               child: SvgPicture.network(
                 widget.pokemon.image,
                 width: width,
+                height: height * 0.25,
                 fit: BoxFit.scaleDown,
               ),
             ),
@@ -54,26 +63,57 @@ class _PokemonDetailPageState extends State<PokemonDetailPage> {
       children: [
         Container(
           width: double.infinity,
+          height: MediaQuery.of(context).size.height / 2,
           decoration: BoxDecoration(
-            color: Colors.yellow,
+            color: Colors.grey.shade900,
             borderRadius: BorderRadius.only(
               topRight: Radius.circular(30),
               topLeft: Radius.circular(30),
             ),
           ),
-           child: Padding(
-            padding: EdgeInsets.all(25),
-            child: Text("Name: " + widget.pokemon.name.toUpperCase()),
-
+          child: Padding(
+            padding: EdgeInsets.all(5),
+            child: Flexible(
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                children: [
+                  Text(
+                    'Name: ' + widget.pokemon.name.toUpperCase(),
+                    style: TextStyle(
+                      fontWeight: FontWeight.bold,
+                      fontSize: 19,
+                      color: Colors.grey.shade500,
+                    ),
+                  ),
+                  Text(
+                    'Height: ${widget.pokemon.height}',
+                    style: TextStyle(
+                      fontWeight: FontWeight.bold,
+                      fontSize: 19,
+                      color: Colors.grey.shade500,
+                    ),
+                  ),
+                  Text(
+                    'Type: ' + widget.pokemon.types.toUpperCase(),
+                    style: TextStyle(
+                      fontWeight: FontWeight.bold,
+                      fontSize: 19,
+                      color: Colors.grey.shade500,
+                    ),
+                  ),
+                  Text(
+                    'Abilities: ' + widget.pokemon.abilities.toUpperCase(),
+                    style: TextStyle(
+                      fontWeight: FontWeight.bold,
+                      fontSize: 19,
+                      color: Colors.grey.shade500,
+                    ),
+                  ),
+                ],
+              ),
+            ),
           ),
-
-
         ),
-        SizedBox(height: 15), // Spacing
-
-
-
-
       ],
     );
   }

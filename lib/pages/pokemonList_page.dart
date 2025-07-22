@@ -16,7 +16,7 @@ class PokemonListPage extends StatefulWidget {
 
 class PokemonListPageState extends State<PokemonListPage> {
   List<Map<String, dynamic>> pokemon = [];
-  final _pokemon = Pokemon(name: '', image: '', height:0, weight: 0);
+  final _pokemon = Pokemon(name: '', image: '', height:0, weight: 0, types:'', abilities:'');
   bool isLoading = true;
   String? errorMessage;
 
@@ -62,8 +62,10 @@ class PokemonListPageState extends State<PokemonListPage> {
                 'https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/dream-world/${id}.svg';
             final height = pokemonDetails['height'];
             final weight = pokemonDetails['weight'];
-            final types = pokemonDetails['types']; // Array of type objects
-            final abilities = pokemonDetails['abilities']; // Array of abilities
+            final types = (pokemonDetails['types']as List)
+                .map((type)=> type['type']['name'] as String).join(', '); // Array of type objects
+            final abilities = (pokemonDetails['abilities']as List)
+                .map((ability)=> ability['ability']['name']).join(', '); // Array of abilities
             final stats = pokemonDetails['stats']; // HP, Attack, Defense, etc.
             final sprites = pokemonDetails['sprites']; // Various image URLs
 
@@ -158,12 +160,22 @@ class PokemonListPageState extends State<PokemonListPage> {
           image: poke['image'],
           name: poke['name'],
           id: poke['id'],
+          types: poke['types'],
+          abilities: poke['abilities'],
           onTap: () {
             Navigator.push(
               context,
               MaterialPageRoute(
                 builder: (_) => PokemonDetailPage(
-                  pokemon: Pokemon(name: poke['name'], image: poke['image'], height: poke['height'], weight: poke['weight']),
+                  pokemon: Pokemon(
+                      name: poke['name'],
+                      image: poke['image'],
+                      height: poke['height'],
+                      weight: poke['weight'],
+                      types: poke['types'],
+                      abilities: poke['abilities'],
+                  ),
+
                 ),
               ),
             );
